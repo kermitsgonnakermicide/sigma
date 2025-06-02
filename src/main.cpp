@@ -14,8 +14,7 @@ int IN2 = 18;
 double x;
 double y;
 double z;
-double lastZ;
-bool directionForward = true;
+ 
 double speed;
 
 void setup(){
@@ -43,30 +42,22 @@ void loop(){
   x= RAD_TO_DEG * (atan2(-yAng, -zAng)+PI);
   y= RAD_TO_DEG * (atan2(-xAng, -zAng)+PI);
   z= RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
-
-  if (z <= 180) {
-    speed = map(z, 0, 180, 0, 255);
-  } else {
-    speed = map(z, 180, 360, 255, 0);
+  if (z >= 180){
+  speed = map(z, 180, 360, 0, 255);
   }
-
+  else{
+    speed = map(z, 0, 180, 255, 0);
+  }
   Serial.println(speed);
 
-  // Detect 360 → 0 wraparound (or vice versa)
-  if (lastZ > 300 && z < 60) {
-    directionForward = !directionForward; // Flip direction
-  }
-
-  lastZ = z;  // Update for next loop
-
-  // Motor direction control
-  if (directionForward) {
+  if (z >= 180){
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
-  } else {
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, HIGH);
+    analogWrite(ENA, speed);
   }
-
-  analogWrite(ENA, speed);
+  else{
+    digitalWrite(IN2, HIGH);
+    digitalWrite(IN1, LOW);
+    analogWrite(ENA, speed);
+  }
 }
