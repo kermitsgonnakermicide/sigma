@@ -8,7 +8,7 @@ namespace MPU {
     constexpr int minVal = -17000;
     constexpr int maxVal = 17000;
     void setup(int addr) {
-        Wire.begin();
+        Wire.begin(21, 22);
         Wire.beginTransmission(addr);
         Wire.write(0x6B);  // Power management register
         Wire.write(0);     // Wake up MPU6050
