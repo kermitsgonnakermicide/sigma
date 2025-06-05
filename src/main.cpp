@@ -5,8 +5,8 @@
 int ENA = 19;
 int IN1 = 23;
 int IN2 = 18;
-float kP = 850;
-float kD = 65;
+float kP = 910;
+float kD = 0;
 double z;
 double speed;
 MPU6050 mpu;
@@ -64,6 +64,7 @@ void loop(){
   float derivative = (angle - last_angle) / dt;
   float output = kP * angle - kD * derivative;
   last_angle = angle;
+   motor.setSpeed(abs(output));
   if (output > 0){
       Serial.println("Moving Forward");
       motor.forward();
@@ -71,7 +72,6 @@ void loop(){
     Serial.println("Moving Backward");
       motor.backward();
    }
-  motor.setSpeed(abs(output));
   Serial.printf("Speed: %f", abs(output));
   Serial.println(gyroAngle);
 
